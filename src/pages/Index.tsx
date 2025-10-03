@@ -6,10 +6,16 @@ import { BirthdayCake } from "@/components/BirthdayCake";
 import { PhotoPlaceholder } from "@/components/PhotoPlaceholder";
 import { ScrollIndicator } from "@/components/ScrollIndicator";
 import { InteractiveElement } from "@/components/InteractiveElement";
+import { BalloonPopGame } from "@/components/BalloonPopGame";
+import { MemoryGame } from "@/components/MemoryGame";
+import { ConfettiCannon } from "@/components/ConfettiCannon";
+import { ScoreBoard } from "@/components/ScoreBoard";
+import { toast } from "sonner";
 
 const Index = () => {
   const [confettiTrigger, setConfettiTrigger] = useState(0);
   const [balloons, setBalloons] = useState<Array<{ id: number; color: string; left: string; delay: number }>>([]);
+  const [totalScore, setTotalScore] = useState(0);
 
   const balloonColors = [
     "linear-gradient(135deg, #FF6B9D, #C44569)",
@@ -38,6 +44,22 @@ const Index = () => {
   };
 
   const handlePhotoClick = () => {
+    setConfettiTrigger((prev) => prev + 1);
+  };
+
+  const handleScore = (points: number) => {
+    setTotalScore((prev) => prev + points);
+    setConfettiTrigger((prev) => prev + 1);
+  };
+
+  const handleMemoryWin = () => {
+    setTotalScore((prev) => prev + 100);
+    setConfettiTrigger((prev) => prev + 1);
+    toast.success("🏆 Memory Master! +100 points!");
+  };
+
+  const handleCannonFire = () => {
+    setTotalScore((prev) => prev + 5);
     setConfettiTrigger((prev) => prev + 1);
   };
 
@@ -71,6 +93,7 @@ const Index = () => {
       </div>
 
       <Confetti trigger={confettiTrigger} />
+      <ScoreBoard totalScore={totalScore} />
 
       {/* Balloons - fixed position */}
       <div className="fixed inset-0 pointer-events-none z-0">
@@ -145,6 +168,24 @@ const Index = () => {
             <p className="text-center text-xl text-foreground/80 animate-fade-in">
               Click photo frames to add sparkles! ✨
             </p>
+          </div>
+        </section>
+
+        {/* Mini Games Section */}
+        <section className="min-h-screen flex flex-col items-center justify-center px-4 py-20">
+          <div className="w-full max-w-6xl space-y-12">
+            <h2 
+              className="text-5xl md:text-6xl font-bold text-center bg-clip-text text-transparent animate-bounce-in"
+              style={{ backgroundImage: "var(--gradient-text)" }}
+            >
+              Birthday Games! 🎮
+            </h2>
+
+            <div className="space-y-8">
+              <BalloonPopGame onScore={handleScore} />
+              <MemoryGame onWin={handleMemoryWin} />
+              <ConfettiCannon onFire={handleCannonFire} />
+            </div>
           </div>
         </section>
 
