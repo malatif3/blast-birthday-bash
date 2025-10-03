@@ -3,6 +3,9 @@ import { Balloon } from "@/components/Balloon";
 import { Confetti } from "@/components/Confetti";
 import { BirthdayText } from "@/components/BirthdayText";
 import { BirthdayCake } from "@/components/BirthdayCake";
+import { PhotoPlaceholder } from "@/components/PhotoPlaceholder";
+import { ScrollIndicator } from "@/components/ScrollIndicator";
+import { InteractiveElement } from "@/components/InteractiveElement";
 
 const Index = () => {
   const [confettiTrigger, setConfettiTrigger] = useState(0);
@@ -34,19 +37,23 @@ const Index = () => {
     setConfettiTrigger((prev) => prev + 1);
   };
 
+  const handlePhotoClick = () => {
+    setConfettiTrigger((prev) => prev + 1);
+  };
+
   return (
-    <div className="relative min-h-screen overflow-hidden bg-background">
-      {/* Animated gradient background */}
+    <div className="relative min-h-screen overflow-x-hidden bg-background">
+      {/* Animated gradient background - fixed */}
       <div 
-        className="absolute inset-0 opacity-90"
+        className="fixed inset-0 opacity-90 -z-10"
         style={{
           background: "var(--gradient-birthday)",
           animation: "gradient 15s ease infinite",
         }}
       />
       
-      {/* Stars/Sparkles background */}
-      <div className="absolute inset-0 opacity-20">
+      {/* Stars/Sparkles background - fixed */}
+      <div className="fixed inset-0 opacity-20 -z-10">
         {Array.from({ length: 50 }).map((_, i) => (
           <div
             key={i}
@@ -65,8 +72,8 @@ const Index = () => {
 
       <Confetti trigger={confettiTrigger} />
 
-      {/* Balloons */}
-      <div className="absolute inset-0 pointer-events-none">
+      {/* Balloons - fixed position */}
+      <div className="fixed inset-0 pointer-events-none z-0">
         {balloons.map((balloon) => (
           <div key={balloon.id} className="pointer-events-auto">
             <Balloon
@@ -79,12 +86,103 @@ const Index = () => {
         ))}
       </div>
 
-      {/* Main content */}
-      <div className="relative z-10 flex min-h-screen items-center justify-center px-4">
-        <div className="w-full max-w-4xl">
+      {/* Scrollable content */}
+      <div className="relative z-10">
+        {/* Hero Section */}
+        <section className="min-h-screen flex flex-col items-center justify-center px-4 relative">
           <BirthdayText />
           <BirthdayCake onCelebrate={handleCelebrate} />
-        </div>
+          <ScrollIndicator />
+        </section>
+
+        {/* Interactive Elements Section */}
+        <section className="min-h-screen flex flex-col items-center justify-center px-4 py-20">
+          <div className="w-full max-w-4xl space-y-12">
+            <h2 
+              className="text-5xl md:text-6xl font-bold text-center bg-clip-text text-transparent animate-bounce-in"
+              style={{ backgroundImage: "var(--gradient-text)" }}
+            >
+              Make a Wish! 🌟
+            </h2>
+            
+            <div className="flex flex-wrap justify-center gap-8">
+              <InteractiveElement emoji="🎁" onClick={handleCelebrate} />
+              <InteractiveElement emoji="🎊" onClick={handleCelebrate} />
+              <InteractiveElement emoji="🎉" onClick={handleCelebrate} />
+              <InteractiveElement emoji="🎈" onClick={handleCelebrate} />
+              <InteractiveElement emoji="✨" onClick={handleCelebrate} />
+              <InteractiveElement emoji="🌟" onClick={handleCelebrate} />
+            </div>
+
+            <p className="text-center text-xl text-foreground/80 animate-fade-in">
+              Click each icon to celebrate! 🎆
+            </p>
+          </div>
+        </section>
+
+        {/* Photo Memories Section */}
+        <section className="min-h-screen flex flex-col items-center justify-center px-4 py-20">
+          <div className="w-full max-w-6xl space-y-12">
+            <h2 
+              className="text-5xl md:text-6xl font-bold text-center bg-clip-text text-transparent animate-bounce-in"
+              style={{ backgroundImage: "var(--gradient-text)" }}
+            >
+              Birthday Memories 📸
+            </h2>
+
+            {/* Photo Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 place-items-center">
+              <PhotoPlaceholder size="medium" onClick={handlePhotoClick} />
+              <PhotoPlaceholder size="large" onClick={handlePhotoClick} />
+              <PhotoPlaceholder size="medium" onClick={handlePhotoClick} />
+              <PhotoPlaceholder size="small" onClick={handlePhotoClick} />
+              <PhotoPlaceholder size="medium" onClick={handlePhotoClick} />
+              <PhotoPlaceholder size="small" onClick={handlePhotoClick} />
+              <PhotoPlaceholder size="large" onClick={handlePhotoClick} />
+              <PhotoPlaceholder size="medium" onClick={handlePhotoClick} />
+            </div>
+
+            <p className="text-center text-xl text-foreground/80 animate-fade-in">
+              Click photo frames to add sparkles! ✨
+            </p>
+          </div>
+        </section>
+
+        {/* Special Message Section */}
+        <section className="min-h-screen flex flex-col items-center justify-center px-4 py-20">
+          <div className="w-full max-w-3xl space-y-8 text-center">
+            <div className="space-y-4">
+              <div className="flex justify-center gap-4 text-6xl animate-float">
+                🎂 🎈 🎉
+              </div>
+              
+              <h2 
+                className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent animate-glow-pulse"
+                style={{ backgroundImage: "var(--gradient-text)" }}
+              >
+                Wishing You an Amazing Year Ahead!
+              </h2>
+              
+              <div className="space-y-4 text-lg md:text-xl text-foreground/80 max-w-2xl mx-auto">
+                <p className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
+                  May your day be filled with love, laughter, and countless balloons! 🎈
+                </p>
+                <p className="animate-fade-in" style={{ animationDelay: "0.4s" }}>
+                  Here's to another year of amazing adventures and unforgettable memories! ✨
+                </p>
+                <p className="animate-fade-in" style={{ animationDelay: "0.6s" }}>
+                  Keep scrolling up to pop more balloons! 🎊
+                </p>
+              </div>
+
+              <div className="flex justify-center gap-6 pt-8">
+                <InteractiveElement emoji="🥳" onClick={handleCelebrate} />
+                <InteractiveElement emoji="🎂" onClick={handleCelebrate} />
+                <InteractiveElement emoji="💝" onClick={handleCelebrate} />
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
 
       <style>{`
